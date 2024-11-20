@@ -1,19 +1,25 @@
 {
-  "extends": "expo/tsconfig.base",
+  "extends": "expo/tsconfig.base", // Estende as configurações padrão do Expo
   "compilerOptions": {
-    "strict": true,
-    "jsx": "react-native",
+    "strict": true, // Habilita as verificações estritas de tipo (muito útil para evitar erros)
+    "jsx": "react-native", // Garante que o JSX será compilado corretamente para React Native
+    "moduleResolution": "node", // Usado para resolução de módulos, similar a Node.js
     "paths": {
       "@/*": [
-        "./*"
+        "./*" // Permite usar '@' como um alias para a raiz do projeto
       ]
-    }
+    },
+    "esModuleInterop": true, // Permite interoperabilidade com módulos ES (se você usar bibliotecas CommonJS)
+    "skipLibCheck": true, // Ignora a verificação de tipos em arquivos de bibliotecas (útil para evitar erros de tipos em dependências)
+    "forceConsistentCasingInFileNames": true, // Garante que a sensibilidade a maiúsculas/minúsculas seja consistente nos nomes dos arquivos
+    "allowSyntheticDefaultImports": true // Permite imports padrões de módulos CommonJS
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    ".expo/types/**/*.ts",
-    "expo-env.d.ts",
-    "nativewind-env.d.ts"
+    "**/*.ts", // Inclui todos os arquivos .ts
+    "**/*.tsx", // Inclui todos os arquivos .tsx
+    "node_modules/@types", // Inclui os tipos do node_modules
+    ".expo/types/**/*.ts", // Inclui os tipos específicos do Expo
+    "expo-env.d.ts", // Inclui variáveis de ambiente do Expo
+    "nativewind-env.d.ts" // Inclui variáveis de ambiente para NativeWind (se estiver usando)
   ]
 }
