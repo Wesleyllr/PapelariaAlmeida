@@ -1,11 +1,12 @@
-import { Image, View, Text, ScrollView } from 'react-native'
+import { Image, View, Text, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { images } from '../../constants'
 import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton';
-import { Link } from 'expo-router';
+import { Link, router } from 'expo-router';
 import { Platform } from 'react-native';
+import { signIn } from '@/lib/appwrite';
 const SignIn = () => {
   const [form, setForm] = useState({
     email: '',
@@ -14,9 +15,27 @@ const SignIn = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  const submit = () => {
+  const submit = async () => {
+    if(!form.email || !form.password) {
+      Alert.alert('Erro', 'Preencha todos os campos')
+    }
+    setIsSubmitting(true);
+    try {
+      await signIn(form.email, form.password)
+
+
+      // set to global state
+
+      router.replace('/home')
+    } catch (error) {
+      Alert.alert('Error', error.message)
+    } finally {
+      setIsSubmitting(false)
+    }
+
 
   }
+
   return (
     <SafeAreaView className='bg-primary h-full'>
       <ScrollView>
@@ -25,7 +44,7 @@ const SignIn = () => {
           resizeMode='contain'
           className='w-[115px] h-[35px]'/>
             <Text className='text-2xl text-white text-semibold mt-10 font-psemibold'>
-              Te amo
+              Entrar na Papelaria
             </Text>
             <FormField
               title='Email'

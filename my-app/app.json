@@ -13,8 +13,10 @@
     },
     "android": {
       "adaptiveIcon": {
+        "package": "com.moovcolum.almeidaapp",
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+        
       }
     },
     "web": {
