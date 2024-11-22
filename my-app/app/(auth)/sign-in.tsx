@@ -7,6 +7,7 @@ import CustomButton from '@/components/CustomButton';
 import { Link, router } from 'expo-router';
 import { Platform } from 'react-native';
 import { signIn } from '@/lib/appwrite';
+
 const SignIn = () => {
   const [form, setForm] = useState({
     email: '',
@@ -18,6 +19,7 @@ const SignIn = () => {
   const submit = async () => {
     if(!form.email || !form.password) {
       Alert.alert('Erro', 'Preencha todos os campos')
+      return;
     }
     setIsSubmitting(true);
     try {
