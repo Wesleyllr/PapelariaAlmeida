@@ -6,7 +6,6 @@ import {
   Databases,
   Query,
 } from "react-native-appwrite";
-
 export const config = {
   endpoint: "https://cloud.appwrite.io/v1",
   platform: "com.moovcolum.almeidaapp",
@@ -16,15 +15,15 @@ export const config = {
   videoCollectionId: "673e3e3200172eaf12c1",
   storageId: "673e404800323e43c8ab",
 };
-
-const client = new Client()
+const client = new Client();
+client
+  .setEndpoint(config.endpoint)
   .setProject(config.projectId)
   .setPlatform(config.platform);
 
 const account = new Account(client);
 const avatars = new Avatars(client);
 const databases = new Databases(client);
-
 export const createUser = async (email, password, username) => {
   try {
     const newAccount = await account.create(
@@ -34,11 +33,9 @@ export const createUser = async (email, password, username) => {
       username
     );
     if (!newAccount) throw Error;
-
     const avatarUrl = avatars.getInitials(username);
 
     await signIn(email, password);
-
     const newUser = await databases.createDocument(
       config.databaseId,
       config.userCollectionId,
@@ -56,7 +53,6 @@ export const createUser = async (email, password, username) => {
     throw new Error(error);
   }
 };
-
 export const signIn = async (email, password) => {
   try {
     const session = await account.createEmailPasswordSession(email, password);
@@ -80,7 +76,7 @@ export const getCurrentUser = async () => {
 
     if (!currentUser) throw Error;
 
-    return !currentUser.documents[0];
+    return currentUser.documents[0];
   } catch (error) {
     console.log(error);
   }

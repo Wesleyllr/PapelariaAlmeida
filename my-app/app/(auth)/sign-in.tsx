@@ -6,9 +6,11 @@ import FormField from '@/components/FormField'
 import CustomButton from '@/components/CustomButton';
 import { Link, router } from 'expo-router';
 import { Platform } from 'react-native';
-import { signIn } from '@/lib/appwrite';
+import { getCurrentUser, signIn } from '@/lib/appwrite';
+import { useGlobalContext } from '@/context/GlobalProvider';
 
 const SignIn = () => {
+  const { setUser, setIsLoggedIn } = useGlobalContext();
   const [form, setForm] = useState({
     email: '',
     password: '',
@@ -17,16 +19,17 @@ const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
   const submit = async () => {
-    if(!form.email || !form.password) {
-      Alert.alert('Erro', 'Preencha todos os campos')
-      return;
+    if(form.email === ''|| form.password === '') {
+      Alert.alert('Erro', 'Preencha todos os campos');
     }
     setIsSubmitting(true);
     try {
-      await signIn(form.email, form.password)
+      await signIn(form.email, form.password);
+      const result = await getCurrentUser();
+      setUser(result);
+      setIsLoggedIn(true);
 
-
-      // set to global state
+      Alert.alert("Perfeito", "Usuário logado com sucesso");
 
       router.replace('/home')
     } catch (error) {
