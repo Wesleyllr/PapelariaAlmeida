@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import {
   Client,
   Account,
@@ -66,7 +67,10 @@ export const getCurrentUser = async () => {
   try {
     const currentAccount = await account.get();
 
-    if (!currentAccount) throw Error;
+    if (!currentAccount) {
+      console.log("1 Não foi possível carregar o usuário.");
+      return null;
+    }
 
     const currentUser = await databases.listDocuments(
       config.databaseId,
@@ -74,10 +78,15 @@ export const getCurrentUser = async () => {
       [Query.equal("accountId", currentAccount.$id)]
     );
 
-    if (!currentUser) throw Error;
+    if (!currentUser) {
+      console.log("2 Não foi possível carregar o usuário.");
+      return null;
+    }
 
     return currentUser.documents[0];
   } catch (error) {
-    console.log(error);
+    console.log("3 Não foi possível carregar o usuário.");
+    router.replace("/sign-in");
+    return null;
   }
 };
