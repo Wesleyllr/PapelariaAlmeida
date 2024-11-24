@@ -16,6 +16,17 @@ export const config = {
   videoCollectionId: "673e3e3200172eaf12c1",
   storageId: "673e404800323e43c8ab",
 };
+
+const {
+  endpoint,
+  platform,
+  projectId,
+  databaseId,
+  userCollectionId,
+  videoCollectionId,
+  storageId,
+} = config;
+
 const client = new Client();
 client
   .setEndpoint(config.endpoint)
@@ -88,5 +99,18 @@ export const getCurrentUser = async () => {
     console.log("3 Não foi possível carregar o usuário.");
     router.replace("/sign-in");
     return null;
+  }
+};
+
+export const getAllPosts = async () => {
+  try {
+    const posts = await databases.listDocuments(
+      config.databaseId,
+      config.videoCollectionId
+    );
+
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
   }
 };

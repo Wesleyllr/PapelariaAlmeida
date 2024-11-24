@@ -3,7 +3,7 @@ import React from 'react'
 
 const Create = () => {
   return (
-    <View>
+    <View className='bg-primary h-full'>
       <Text>Create</Text>
     </View>
   )
