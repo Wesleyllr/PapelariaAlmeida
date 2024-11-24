@@ -7,6 +7,7 @@ import logoSmall from "../assets/images/logo-small.png";
 import empty from "../assets/images/empty.png";
 import moovcolumblue from "../assets/images/moovcolumblue.png";
 import moovcolumbluesmall from "../assets/images/moovcolumbluesmall.png";
+import logopapelaria from "../assets/images/logopapelaria.png";
 
 export default {
   profile,
@@ -18,4 +19,5 @@ export default {
   empty,
   moovcolumblue,
   moovcolumbluesmall,
+  logopapelaria,
 };
