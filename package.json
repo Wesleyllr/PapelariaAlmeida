@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "expo-video": "^2.0.1",
     "nativewind": "^4.1.23",
     "react-native-reanimated": "^3.16.1",
     "react-native-safe-area-context": "^4.14.0",
