@@ -79,7 +79,6 @@ export const getCurrentUser = async () => {
     const currentAccount = await account.get();
 
     if (!currentAccount) {
-      console.log("1 Não foi possível carregar o usuário.");
       return null;
     }
 
@@ -90,13 +89,11 @@ export const getCurrentUser = async () => {
     );
 
     if (!currentUser) {
-      console.log("2 Não foi possível carregar o usuário.");
       return null;
     }
 
     return currentUser.documents[0];
   } catch (error) {
-    console.log("3 Não foi possível carregar o usuário.");
     router.replace("/sign-in");
     return null;
   }
@@ -131,6 +128,27 @@ export const searchPosts = async (query) => {
     ]);
 
     return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getUserPosts = async (userId) => {
+  try {
+    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
+      Query.equal("creator", userId),
+    ]);
+
+    return posts.documents;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const signOut = async () => {
+  try {
+    const session = await account.deleteSession("current");
+    return session;
   } catch (error) {
     throw new Error(error);
   }

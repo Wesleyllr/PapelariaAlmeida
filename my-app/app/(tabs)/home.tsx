@@ -11,6 +11,7 @@ import { images } from "@/constants";
 import { getAllPosts, getLatestPosts } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import VideoCard from "@/components/VideoCard";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 type posts = {
   $id: string;
@@ -27,6 +28,7 @@ const Home = () => {
   const { data: posts, refetch } = useAppwrite(getAllPosts);
   const { data: latestPosts } = useAppwrite(getLatestPosts);
   const [searchValue, setSearchValue] = useState(""); // Estado para o campo de busca
+  const { user } = useGlobalContext();
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -39,8 +41,7 @@ const Home = () => {
   return (
     <SafeAreaView className="bg-primary h-full ">
       <FlatList
-        //data={[{id: 1},{id: 2},{id: 3}]}
-        data={posts}
+        data={posts || []}
         keyExtractor={(item) => item.$id}
         renderItem={({ item }) => <VideoCard video={item} />}
         ListHeaderComponent={() => (
@@ -51,7 +52,7 @@ const Home = () => {
                   Bem vindo
                 </Text>
                 <Text className="text-2xl font-psemibold text-white">
-                  Wesleyll
+                  {user?.username}
                 </Text>
               </View>
               <View className="mt-1.5">
