@@ -14,12 +14,12 @@ import { icons } from "@/constants";
 import InfoBox from "@/components/InfoBox";
 
 const Profile = () => {
-  const { user, setUser, setInLoggedIn } = useGlobalContext();
+  const { user, setUser, setIsLoggedIn } = useGlobalContext();
   const { data: posts } = useAppwrite(() => getUserPosts(user.$id));
   const logout = async () => {
     await signOut();
     setUser(null);
-    setInLoggedIn(false);
+    setIsLoggedIn(false);
 
     router.replace("/sign-in");
   };

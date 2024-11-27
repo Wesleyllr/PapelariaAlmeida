@@ -6,7 +6,9 @@ module.exports = function (api) {
       ["babel-preset-expo", { jsxImportSource: "nativewind" }],
       "nativewind/babel",
     ],
-    // Adicione suporte explícito para arquivos .tsx
+    plugins: [
+      "react-native-reanimated/plugin", // Plugin necessário para o reanimated
+    ],
     overrides: [
       {
         test: /\.tsx?$/, // Arquivos TSX e TS

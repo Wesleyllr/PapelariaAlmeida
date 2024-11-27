@@ -42,15 +42,15 @@ const SignIn = () => {
         <View className="w-full justify-center items-center min-h-[84vh] px-4 my-6">
           <View className="flex-row items-center justify-center">
             <Image
-              source={images.moovcolumblue}
+              source={images.logopapelaria}
               resizeMode="contain"
-              className="w-[115px] h-[35px]"
+              className="w-[150px] h-[85px]"
             />
             <View className="w-[1px] h-full bg-white" />
             <Image
-              source={images.logopapelaria}
+              source={images.moovcolumblue}
               resizeMode="contain"
-              className="w-[35px] h-[35px]"
+              className="w-[155px] h-[45px]"
             />
           </View>
 

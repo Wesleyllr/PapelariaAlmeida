@@ -3,7 +3,7 @@ import {
   useContext,
   useState,
   useEffect,
-  Children,
+  children,
 } from "react";
 import { getCurrentUser } from "../lib/appwrite";
 
