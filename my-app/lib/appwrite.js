@@ -15,6 +15,7 @@ export const config = {
   databaseId: "673e3db1001e2c0dc837",
   userCollectionId: "673e3dee0006107ea9e6",
   videoCollectionId: "673e3e3200172eaf12c1",
+  produtosCollectionId: "6748b56e0025fa373dd9",
   storageId: "673e404800323e43c8ab",
 };
 
@@ -24,6 +25,7 @@ const {
   projectId,
   databaseId,
   userCollectionId,
+  produtosCollectionId,
   videoCollectionId,
   storageId,
 } = config;
@@ -227,6 +229,20 @@ export const createVideo = async (form) => {
     );
 
     return newPost;
+  } catch (error) {
+    throw new Error(error);
+  }
+};
+
+export const getUserProducts = async (userId) => {
+  try {
+    const produtos = await databases.listDocuments(
+      databaseId,
+      produtosCollectionId,
+      [Query.equal("creator", userId)]
+    );
+
+    return produtos.documents;
   } catch (error) {
     throw new Error(error);
   }
