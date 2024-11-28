@@ -73,7 +73,7 @@ const Create = () => {
       Alert.alert("Sucesso", "Vídeo publicado");
       router.push("/home");
     } catch (error) {
-      Alert.alert(`Erro 1 ${error}`);
+      Alert.alert("Error", error.message);
     } finally {
       setForm({
         title: "",
