@@ -14,6 +14,8 @@ import { useVideoPlayer, VideoView } from "expo-video";
 import CustomButton from "@/components/CustomButton";
 import * as DocumentPicker from "expo-document-picker";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { router } from "expo-router";
+import { createVideo } from "@/lib/appwrite";
 
 const Create = () => {
   const { user } = useGlobalContext();
@@ -47,10 +49,6 @@ const Create = () => {
           video: result.assets[0],
         });
       }
-    } else {
-      setTimeout(() => {
-        Alert.alert("Document picked", JSON.stringify(result, null, 2));
-      }, 100);
     }
   };
 
@@ -61,10 +59,30 @@ const Create = () => {
       !form.thumbnail ||
       !form.video
     ) {
-      return Alert.alert("Please provide all fields");
+      return Alert.alert("Preencha todos os campos.");
     }
 
     setUploading(true);
+
+    try {
+      await createVideo({
+        ...form,
+        userId: user.$id,
+      });
+
+      Alert.alert("Sucesso", "Vídeo publicado");
+      router.push("/home");
+    } catch (error) {
+      Alert.alert(`Erro 1 ${error}`);
+    } finally {
+      setForm({
+        title: "",
+        video: null,
+        thumbnail: null,
+        prompt: "",
+      });
+      setUploading(false);
+    }
   };
 
   const playerRef = useRef(null);
@@ -78,17 +96,15 @@ const Create = () => {
         <Text className="text-2xl text-white font-psemibold">Upload Video</Text>
 
         <FormField
-          title="Video Title"
+          title="Título"
           value={form.title}
-          placeholder="Give your video a catchy title..."
+          placeholder="Escreva um título atraente"
           handleChangeText={(e) => setForm({ ...form, title: e })}
           otherStyles="mt-10"
         />
 
         <View className="mt-7 space-y-2">
-          <Text className="text-base text-gray-100 font-pmedium">
-            Upload Video
-          </Text>
+          <Text className="text-base text-gray-100 font-pmedium">Vídeo</Text>
 
           <TouchableOpacity onPress={() => openPicker("video")}>
             {form.video ? (
@@ -96,13 +112,11 @@ const Create = () => {
                 player={player}
                 style={{
                   width: "100%",
-                  height: 256, // 64 * 4, pois no React Native, as unidades de altura e largura são em dp (density-independent pixels)
-                  borderRadius: 16, // 2xl geralmente equivale a um valor como 16 ou 20 para bordas arredondadas
-                  borderWidth: 2,
-                  borderColor: "#SECUNDARY", // Substitua '#SECUNDARY' pela cor desejada
+                  height: 200,
+                  borderRadius: 16,
                 }}
-                allowsFullscreen
-                allowsPictureInPicture
+                nativeControls={false}
+                contentFit="cover"
               />
             ) : (
               <View className="w-full h-40 px-4 bg-black-100 rounded-2xl border border-black-200 flex justify-center items-center">
@@ -121,7 +135,7 @@ const Create = () => {
 
         <View className="mt-7 space-y-2">
           <Text className="text-base text-gray-100 font-pmedium">
-            Thumbnail Image
+            Capa - Thumbnail
           </Text>
 
           <TouchableOpacity onPress={() => openPicker("image")}>
@@ -148,15 +162,15 @@ const Create = () => {
         </View>
 
         <FormField
-          title="AI Prompt"
+          title="Descrição"
           value={form.prompt}
-          placeholder="The AI prompt of your video...."
+          placeholder="Escreva a descrição do seu vídeo."
           handleChangeText={(e) => setForm({ ...form, prompt: e })}
           otherStyles="mt-7"
         />
 
         <CustomButton
-          title="Submit & Publish"
+          title="Publicar"
           handlePress={submit}
           containerStyles="mt-7"
           isLoading={uploading}
