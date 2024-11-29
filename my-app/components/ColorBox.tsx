@@ -8,11 +8,10 @@ import {
 } from "react-native";
 
 interface ItemBoxProdutoProps {
-  imageSource: string | null; // Caminho da imagem, ex.: "require(...)" ou URL
+  imageSource: string; // Caminho da imagem, ex.: "require(...)" ou URL
   title: string; // Título do produto
   price: string; // Valor do produto
   onPress?: (event: GestureResponderEvent) => void; // Função para clique
-  backgroundColor?: string; // Cor de fundo caso a imagem seja nula
 }
 
 const ItemBoxProduto: React.FC<ItemBoxProdutoProps> = ({
@@ -20,7 +19,6 @@ const ItemBoxProduto: React.FC<ItemBoxProdutoProps> = ({
   title,
   price,
   onPress,
-  backgroundColor,
 }) => {
   // Formatando o preço com a moeda brasileira, incluindo o espaço após "R$"
   const formattedPrice = new Intl.NumberFormat("pt-BR", {
@@ -37,18 +35,13 @@ const ItemBoxProduto: React.FC<ItemBoxProdutoProps> = ({
         className="mx-3 h-16 flex-row gap-2 bg-black-100"
         onPress={onPress}
       >
-        {imageSource ? (
-          <Image
-            source={{ uri: imageSource }}
-            className="w-16 h-full bg-white rounded-sm"
-            resizeMode="cover"
-          />
-        ) : (
-          <View
-            className="w-16 h-full rounded-sm"
-            style={{ backgroundColor: backgroundColor || "#ccc" }}
-          />
-        )}
+        <Image
+          source={
+            typeof imageSource === "string" ? { uri: imageSource } : imageSource
+          }
+          className="w-16 h-full bg-white rounded-sm"
+          resizeMode="cover"
+        />
         <Text
           className="flex-1 text-white text-center text-xl font-psemibold"
           numberOfLines={2}

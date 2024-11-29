@@ -24,7 +24,6 @@ const Create = () => {
     title: "",
     capa: null,
     valor: "",
-    colorback: null,
   });
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
 
@@ -38,16 +37,12 @@ const Create = () => {
         ...form,
         capa: result.assets[0],
       });
-      //setSelectedColor(null); // Redefine a cor selecionada
+      setSelectedColor(null); // Redefine a cor selecionada
     }
   };
 
   const submit = async () => {
-    if (
-      form.valor === "" ||
-      form.title === "" ||
-      (!form.capa && !selectedColor)
-    ) {
+    if (form.valor === "" || form.title === "" || !form.capa) {
       return Alert.alert("Preencha todos os campos.");
     }
 
@@ -58,11 +53,11 @@ const Create = () => {
       if (isNaN(floatValor)) {
         throw new Error("O valor deve ser um número válido.");
       }
+
       await createProduto({
         ...form,
         valor: floatValor,
         userId: user.$id,
-        colorback: form.capa ? null : selectedColor,
       });
 
       Alert.alert("Sucesso", "Produto Criado");

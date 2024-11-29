@@ -185,9 +185,8 @@ export const getFilePreview = async (fileId, type) => {
 };
 
 export const uploadFile = async (file, type) => {
-  if (!file) return;
+  if (!file) return null;
 
-  const { mimeType, ...rest } = file;
   const asset = {
     name: file.name,
     type: file.mimeType,
@@ -196,15 +195,19 @@ export const uploadFile = async (file, type) => {
   };
 
   try {
+    console.log("Iniciando upload do arquivo...");
     const uploadedFile = await storage.createFile(
       storageId,
       ID.unique(),
       asset
     );
+    console.log("Arquivo carregado com sucesso:", uploadedFile);
     const fileUrl = await getFilePreview(uploadedFile.$id, type);
+    console.log("URL do arquivo:", fileUrl);
     return fileUrl;
   } catch (error) {
-    throw new Error(error);
+    console.error("Erro ao fazer upload da imagem:", error);
+    throw new Error(`Erro ao fazer upload da imagem: ${error.message}`);
   }
 };
 
@@ -245,5 +248,51 @@ export const getUserProducts = async (userId) => {
     return produtos.documents;
   } catch (error) {
     throw new Error(error);
+  }
+};
+
+export const createProduto = async (form) => {
+  try {
+    const capaUrl = form.capa ? await uploadImage(form.capa, "image") : null;
+
+    const newProduto = await databases.createDocument(
+      databaseId,
+      produtosCollectionId,
+      ID.unique(),
+      {
+        title: form.title,
+        capa: capaUrl,
+        valor: form.valor,
+        creator: form.userId,
+        colorback: form.colorback,
+      }
+    );
+
+    return newProduto;
+  } catch (error) {
+    throw new Error(`Erro ao criar produto: ${error.message}`);
+  }
+};
+
+export const uploadImage = async (file, type) => {
+  if (!file) return null;
+
+  const asset = {
+    name: file.name,
+    type: file.mimeType,
+    size: file.size,
+    uri: file.uri,
+  };
+
+  try {
+    const uploadedImage = await storage.createFile(
+      storageId,
+      ID.unique(),
+      asset
+    );
+    const imageUrl = await getFilePreview(uploadedImage.$id, type);
+    return imageUrl;
+  } catch (error) {
+    throw new Error(`Erro ao fazer upload da imagem: ${error.message}`);
   }
 };
