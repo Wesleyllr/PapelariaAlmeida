@@ -6,8 +6,9 @@ import {
   Alert,
   FlatList,
   ActivityIndicator,
+  RefreshControl,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomButton from "@/components/CustomButton";
 import { icons } from "@/constants";
@@ -18,12 +19,33 @@ import useAppwrite from "@/lib/useAppwrite";
 
 const Bookmark = () => {
   const { user } = useGlobalContext();
-  const { data: produtos, isLoading } = useAppwrite(() =>
-    getUserProducts(user.$id)
-  );
+  const {
+    data: produtos,
+    isLoading,
+    refetch,
+  } = useAppwrite(() => getUserProducts(user.$id));
+
+  // Estado de controle de recarregamento
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Função que será chamada para atualizar a lista de produtos
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch(); // Chama a função de atualização de dados
+    setRefreshing(false); // Termina o carregamento
+  };
+  const [total, setTotal] = useState(0);
+
+  const handleProductPress = (valor) => {
+    setTotal((prevTotal) => prevTotal + valor); // Soma o valor do produto ao total
+  };
 
   const cobrar = async () => {
     // Implementação futura
+  };
+
+  const limpar = async () => {
+    setTotal((prevTotal) => 0);
   };
 
   return (
@@ -32,6 +54,7 @@ const Bookmark = () => {
         <TouchableOpacity
           className="mr-3 mt-3 w-[20%] h-[62px]
           rounded-xl bg-red-500 justify-center items-center"
+          onPress={limpar}
         >
           <Image
             source={icons.close}
@@ -41,6 +64,7 @@ const Bookmark = () => {
         </TouchableOpacity>
         <CustomButton
           title="COBRAR"
+          valordoproduto={`R$ ${total.toFixed(2)}`}
           handlePress={cobrar}
           containerStyles="mt-3 w-[75%]"
         />
@@ -57,7 +81,7 @@ const Bookmark = () => {
               title={item.title}
               price={item.valor}
               backgroundColor={item.colorback} // Passa a cor de fundo
-              onPress={() => Alert.alert("Produto clicado")}
+              onPress={() => handleProductPress(item.valor)}
             />
           )}
           keyExtractor={(item) => item.$id}
@@ -66,6 +90,9 @@ const Bookmark = () => {
               Nenhum produto encontrado.
             </Text>
           )}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       )}
     </SafeAreaView>

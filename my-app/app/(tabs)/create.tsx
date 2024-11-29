@@ -66,7 +66,6 @@ const Create = () => {
       });
 
       Alert.alert("Sucesso", "Produto Criado");
-      router.push("/home");
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -74,6 +73,7 @@ const Create = () => {
         title: "",
         capa: null,
         valor: "",
+        colorback: null,
       });
       setUploading(false);
     }

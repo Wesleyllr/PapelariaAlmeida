@@ -55,7 +55,7 @@ const ItemBoxProduto: React.FC<ItemBoxProdutoProps> = ({
         >
           {title}
         </Text>
-        <Text className="w-28 text-white text-justify text-xl font-psemibold align-middle">
+        <Text className="w-28 text-white text-right text-xl font-psemibold align-middle border-2 border-white">
           {priceWithSpace}
         </Text>
       </TouchableOpacity>

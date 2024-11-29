@@ -7,6 +7,7 @@ interface CustomButtonProps {
   containerStyles: string;
   textStyles?: string;
   isLoading?: boolean;
+  valordoproduto: string;
 }
 
 const CustomButton: React.FC<CustomButtonProps> = ({
@@ -15,6 +16,7 @@ const CustomButton: React.FC<CustomButtonProps> = ({
   containerStyles,
   textStyles,
   isLoading,
+  valordoproduto,
 }) => {
   return (
     <TouchableOpacity
@@ -28,6 +30,13 @@ const CustomButton: React.FC<CustomButtonProps> = ({
       <Text className={`text-primary font-psemibold text-lg ${textStyles}`}>
         {title}
       </Text>
+
+      {/* Exibe o valor apenas se não for uma string vazia */}
+      {valordoproduto ? (
+        <Text className={`text-primary font-psemibold text-lg ${textStyles}`}>
+          {valordoproduto}
+        </Text>
+      ) : null}
     </TouchableOpacity>
   );
 };
