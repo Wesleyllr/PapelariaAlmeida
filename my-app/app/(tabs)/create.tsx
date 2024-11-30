@@ -65,7 +65,7 @@ const Create = () => {
         colorback: form.capa ? null : selectedColor,
       });
 
-      Alert.alert("Sucesso", "Produto Criado");
+      Alert.alert("Sucesso", `${form.title} registrado`);
     } catch (error) {
       Alert.alert("Error", error.message);
     } finally {
@@ -140,7 +140,7 @@ const Create = () => {
         />
 
         <CustomButton
-          title="Publicar"
+          title="Registrar"
           handlePress={submit}
           containerStyles="mt-7"
           isLoading={uploading}

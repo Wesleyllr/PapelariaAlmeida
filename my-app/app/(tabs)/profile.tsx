@@ -56,27 +56,15 @@ const Profile = () => {
               containerStyles="mt-5"
               titleStyles="text-lg"
             />
-            <View className=" mt-5 flex-row">
+            <View className=" mt-5 flex-1">
               <InfoBox
                 title={posts.length || 0}
-                subtitle="Posts"
+                subtitle="Produtos"
                 containerStyles="mr-10"
                 titleStyles="text-xl"
               />
-              <InfoBox
-                title="1.2KK"
-                subtitle="Seguidores"
-                containerStyles={undefined}
-                titleStyles="text-lg"
-              />
             </View>
           </View>
-        )}
-        ListEmptyComponent={() => (
-          <EmptyState
-            title="Vídeo não encontrado"
-            subtitle="Nenhum vídeo encontrato com esse título"
-          />
         )}
       />
 

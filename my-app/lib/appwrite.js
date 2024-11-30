@@ -141,9 +141,11 @@ export const searchPosts = async (query) => {
 
 export const getUserPosts = async (userId) => {
   try {
-    const posts = await databases.listDocuments(databaseId, videoCollectionId, [
-      Query.equal("creator", userId),
-    ]);
+    const posts = await databases.listDocuments(
+      databaseId,
+      produtosCollectionId,
+      [Query.equal("creator", userId)]
+    );
 
     return posts.documents;
   } catch (error) {
@@ -318,5 +320,23 @@ export const registrarVenda = async (produto, pedidoId) => {
     );
   } catch (error) {
     console.error("Erro ao registrar venda:", error);
+  }
+};
+
+export const getAllProdutosVendidos = async (userId) => {
+  try {
+    // Obtenha todos os documentos da coleção de produtos vendidos
+    const produtosVendidos = await databases.listDocuments(
+      databaseId,
+      produtosvendidosCollectionId,
+      [Query.equal("vendedorId", userId)]
+    );
+
+    // Log os dados no console
+
+    // Retorne os produtos vendidos, se necessário
+    return produtosVendidos.documents;
+  } catch (error) {
+    console.error("Erro ao obter produtos vendidos:", error);
   }
 };

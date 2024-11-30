@@ -40,11 +40,11 @@ const SignUp = () => {
   return (
     <SafeAreaView className="bg-primary h-full">
       <ScrollView>
-        <View className="w-full justify-center items-center min-h-[84vh] px-4 my-6">
+        <View className="w-full justify-center items-center min-h-[84vh] px-4 my-4">
           <Image
-            source={images.logo}
+            source={images.logopapelaria}
             resizeMode="contain"
-            className="w-[115px] h-[35px]"
+            className="w-[115px] h-[115px] "
           />
           <Text className="text-2xl text-white text-semibold mt-10 font-psemibold">
             Cadastrar na Papelaria

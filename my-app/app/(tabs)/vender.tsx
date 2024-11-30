@@ -18,7 +18,7 @@ import ItemBoxProduto from "@/components/ItemBoxProduto";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { getUserProducts, registrarVenda } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
-import { router } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
 import { ID } from "react-native-appwrite";
 
 const Vender = () => {
@@ -28,12 +28,13 @@ const Vender = () => {
     isLoading,
     refetch,
   } = useAppwrite(() => getUserProducts(user.$id));
+  const navigation = useNavigation();
 
   const [refreshing, setRefreshing] = useState(false);
   const [total, setTotal] = useState(0);
   const [sortOption, setSortOption] = useState<"title" | "price">("title");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
-  const [sortedProdutos, setSortedProdutos] = useState(produtos);
+  const [sortedProdutos, setSortedProdutos] = useState([]);
   const [clickCounts, setClickCounts] = useState<Record<string, number>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -55,6 +56,17 @@ const Vender = () => {
       ...prevCounts,
       [id]: (prevCounts[id] || 0) + 1,
     }));
+  };
+
+  const verpedido = async () => {
+    const selectedProducts = sortedProdutos.filter(
+      (product) => clickCounts[product.$id] > 0
+    );
+    navigation.navigate("resumovenda", {
+      selectedProducts,
+      total,
+      clickCounts,
+    });
   };
 
   const cobrar = async () => {
@@ -79,8 +91,8 @@ const Vender = () => {
           pedidoId
         );
       }
+
       limpar();
-      //router.push("/resumovenda");
     } catch (error) {
       Alert.alert("Erro", "Erro ao registrar vendas.");
       console.error("Erro ao registrar vendas:", error);
@@ -122,9 +134,9 @@ const Vender = () => {
 
   return (
     <SafeAreaView className="bg-primary w-full h-full">
-      <View className="w-full flex-row justify-center items-center">
+      <View className="w-full flex-row justify-center items-center gap-2 px-2">
         <TouchableOpacity
-          className="mr-3 mt-3 w-[20%] h-[62px] rounded-xl bg-red-500 justify-center items-center"
+          className="mt-3 w-[20%] h-[62px] rounded-xl bg-red-500 justify-center items-center"
           onPress={limpar}
         >
           <Image
@@ -134,10 +146,15 @@ const Vender = () => {
           />
         </TouchableOpacity>
         <CustomButton
+          title="VER PEDIDO"
+          handlePress={verpedido}
+          containerStyles="mt-3 px-2"
+        />
+        <CustomButton
           title="COBRAR"
           valordoproduto={`R$ ${total.toFixed(2)}`}
           handlePress={cobrar}
-          containerStyles="mt-3 w-[75%]"
+          containerStyles="mt-3 flex-1 bg-[#2aff32]"
         />
       </View>
       <View className="mt-2 w-full h-[2px] bg-gray-400"></View>

@@ -46,12 +46,6 @@ const SignIn = () => {
               resizeMode="contain"
               className="w-[150px] h-[85px]"
             />
-            <View className="w-[1px] h-full bg-white" />
-            <Image
-              source={images.moovcolumblue}
-              resizeMode="contain"
-              className="w-[155px] h-[45px]"
-            />
           </View>
 
           <Text className="text-2xl text-white text-semibold mt-10 font-psemibold">

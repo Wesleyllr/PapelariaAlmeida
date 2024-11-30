@@ -5,7 +5,7 @@ const InfoBoxPedido = ({ title, qtdProduto, valorTotalProduto }) => {
   return (
     <View>
       <View className="flex-row h-10 gap-2">
-        <View className="flex-1 h-10 flex-row items-center justify-between px-2">
+        <View className="flex-1 flex-row items-center justify-between px-2">
           <Text
             className="mr-2 text-white text-lg font-pmedium text-wrap"
             numberOfLines={1}
