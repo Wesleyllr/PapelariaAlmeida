@@ -16,6 +16,7 @@ export const config = {
   userCollectionId: "673e3dee0006107ea9e6",
   videoCollectionId: "673e3e3200172eaf12c1",
   produtosCollectionId: "6748b56e0025fa373dd9",
+  produtosvendidosCollectionId: "674a8c3b003a63a2b57f",
   storageId: "673e404800323e43c8ab",
 };
 
@@ -27,6 +28,7 @@ const {
   userCollectionId,
   produtosCollectionId,
   videoCollectionId,
+  produtosvendidosCollectionId,
   storageId,
 } = config;
 
@@ -294,5 +296,27 @@ export const uploadImage = async (file, type) => {
     return imageUrl;
   } catch (error) {
     throw new Error(`Erro ao fazer upload da imagem: ${error.message}`);
+  }
+};
+
+export const registrarVenda = async (produto, pedidoId) => {
+  try {
+    const response = await databases.createDocument(
+      databaseId, // Substitua pelo ID do banco de dados
+      produtosvendidosCollectionId, // Substitua pelo ID da coleção
+      ID.unique(), // Gera um ID único para o registro
+      {
+        produtoId: produto.id,
+        nomeproduto: produto.nome,
+        quantidade: produto.quantidade,
+        valor: produto.preco,
+        valortotal: produto.quantidade * produto.preco,
+        datavenda: new Date().toISOString(),
+        vendedorId: produto.userId, // Substitua pelo ID do usuário autenticado
+        pedidoId: pedidoId,
+      }
+    );
+  } catch (error) {
+    console.error("Erro ao registrar venda:", error);
   }
 };

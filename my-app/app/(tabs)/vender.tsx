@@ -16,9 +16,10 @@ import CustomButton from "@/components/CustomButton";
 import { icons } from "@/constants";
 import ItemBoxProduto from "@/components/ItemBoxProduto";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { getUserProducts } from "@/lib/appwrite";
+import { getUserProducts, registrarVenda } from "@/lib/appwrite";
 import useAppwrite from "@/lib/useAppwrite";
 import { router } from "expo-router";
+import { ID } from "react-native-appwrite";
 
 const Vender = () => {
   const { user } = useGlobalContext();
@@ -33,7 +34,8 @@ const Vender = () => {
   const [sortOption, setSortOption] = useState<"title" | "price">("title");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [sortedProdutos, setSortedProdutos] = useState(produtos);
-  const [clickCounts, setClickCounts] = useState({});
+  const [clickCounts, setClickCounts] = useState<Record<string, number>>({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (produtos) {
@@ -56,8 +58,35 @@ const Vender = () => {
   };
 
   const cobrar = async () => {
-    // Implementação futura
-    router.push("/resumovenda");
+    const selectedProducts = sortedProdutos.filter(
+      (product) => clickCounts[product.$id] > 0
+    );
+
+    const pedidoId = ID.unique(); // Gera um identificador único para o pedido
+
+    setIsSubmitting(true);
+
+    try {
+      for (const product of selectedProducts) {
+        await registrarVenda(
+          {
+            id: product.$id,
+            nome: product.title,
+            quantidade: clickCounts[product.$id],
+            preco: parseFloat(product.valor),
+            userId: user.$id,
+          },
+          pedidoId
+        );
+      }
+      limpar();
+      //router.push("/resumovenda");
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao registrar vendas.");
+      console.error("Erro ao registrar vendas:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const limpar = async () => {
@@ -112,67 +141,73 @@ const Vender = () => {
         />
       </View>
       <View className="mt-2 w-full h-[2px] bg-gray-400"></View>
-      <View className="mx-3 flex-row gap-2">
-        <View className="w-16"></View>
-        <View className="flex-1 flex-row justify-between">
-          <Text className="flex-1 text-white align-middle text-center font-pregular text-lg">
-            Produto
-          </Text>
-          <Icon
-            color="#0CC"
-            containerStyle={{}}
-            disabledStyle={{}}
-            iconProps={{}}
-            iconStyle={{}}
-            name="reorder"
-            onPress={() => handleSortOptionChange("title")}
-            size={30}
-            type="material"
-          />
-        </View>
-        <View className="w-28 flex-row justify-between">
-          <Text className="flex-1 text-white align-middle text-center font-pregular text-lg">
-            Valor
-          </Text>
-          <Icon
-            color="#0CC"
-            containerStyle={{}}
-            disabledStyle={{}}
-            iconProps={{}}
-            iconStyle={{}}
-            name="reorder"
-            onPress={() => handleSortOptionChange("price")}
-            size={30}
-            type="material"
-          />
-        </View>
-      </View>
-      {isLoading ? (
+      {isSubmitting ? (
         <ActivityIndicator size="large" color="#fff" />
       ) : (
-        <FlatList
-          className="pt-2"
-          data={sortedProdutos || []}
-          renderItem={({ item }) => (
-            <ItemBoxProduto
-              imageSource={item.capa}
-              title={item.title}
-              price={item.valor}
-              backgroundColor={item.colorback}
-              onPress={() => handleProductPress(item.$id, item.valor)}
-              clickCount={clickCounts[item.$id] || 0}
+        <>
+          <View className="mx-3 flex-row gap-2">
+            <View className="w-16"></View>
+            <View className="flex-1 flex-row justify-between">
+              <Text className="flex-1 text-white align-middle text-center font-pregular text-lg">
+                Produto
+              </Text>
+              <Icon
+                color="#0CC"
+                containerStyle={{}}
+                disabledStyle={{}}
+                iconProps={{}}
+                iconStyle={{}}
+                name="reorder"
+                onPress={() => handleSortOptionChange("title")}
+                size={30}
+                type="material"
+              />
+            </View>
+            <View className="w-28 flex-row justify-between">
+              <Text className="flex-1 text-white align-middle text-center font-pregular text-lg">
+                Valor
+              </Text>
+              <Icon
+                color="#0CC"
+                containerStyle={{}}
+                disabledStyle={{}}
+                iconProps={{}}
+                iconStyle={{}}
+                name="reorder"
+                onPress={() => handleSortOptionChange("price")}
+                size={30}
+                type="material"
+              />
+            </View>
+          </View>
+          {isLoading ? (
+            <ActivityIndicator size="large" color="#fff" />
+          ) : (
+            <FlatList
+              className="pt-2"
+              data={sortedProdutos || []}
+              renderItem={({ item }) => (
+                <ItemBoxProduto
+                  imageSource={item.capa}
+                  title={item.title}
+                  price={item.valor}
+                  backgroundColor={item.colorback}
+                  onPress={() => handleProductPress(item.$id, item.valor)}
+                  clickCount={clickCounts[item.$id] || 0}
+                />
+              )}
+              keyExtractor={(item) => item.$id}
+              ListEmptyComponent={() => (
+                <Text className="text-white text-center mt-10">
+                  Nenhum produto encontrado.
+                </Text>
+              )}
+              refreshControl={
+                <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+              }
             />
           )}
-          keyExtractor={(item) => item.$id}
-          ListEmptyComponent={() => (
-            <Text className="text-white text-center mt-10">
-              Nenhum produto encontrado.
-            </Text>
-          )}
-          refreshControl={
-            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-          }
-        />
+        </>
       )}
     </SafeAreaView>
   );
