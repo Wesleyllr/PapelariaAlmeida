@@ -12,6 +12,8 @@ import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
 import close from "../assets/icons/close.png";
+import vender from "../assets/icons/vender.png";
+import arrowBack from "../assets/icons/arrow_back.png";
 
 export default {
   play,
@@ -28,4 +30,6 @@ export default {
   eyeHide,
   eye,
   close,
+  vender,
+  arrowBack,
 };

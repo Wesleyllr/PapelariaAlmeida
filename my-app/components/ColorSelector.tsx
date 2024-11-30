@@ -4,6 +4,7 @@ import { View, TouchableOpacity } from "react-native";
 const ColorSelector = ({ selectedColor, setSelectedColor, disabled }) => {
   // Lista de cores
   const colors = [
+    "#f9fafb",
     "#2dde12",
     "#603209",
     "#007bff",
@@ -11,7 +12,6 @@ const ColorSelector = ({ selectedColor, setSelectedColor, disabled }) => {
     "#ffc107",
     "#fd7e14",
     "#6f42c1",
-    "#17a2b8",
   ];
 
   return (

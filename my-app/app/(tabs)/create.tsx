@@ -95,17 +95,19 @@ const Create = () => {
         />
 
         <View className="mt-7 space-y-2">
-          <Text className="text-base text-gray-100 font-pmedium">Imagem</Text>
+          <Text className="text-base text-gray-100 font-pmedium">
+            Capa (imagem ou cor)
+          </Text>
           <View className="w-full flex-row gap-2">
             <TouchableOpacity onPress={openPicker}>
               {form.capa ? (
                 <Image
                   source={{ uri: form.capa.uri }}
                   resizeMode="cover"
-                  className="w-36 h-36 rounded-2xl"
+                  className="w-32 h-32 rounded-2xl"
                 />
               ) : (
-                <View className="w-36 h-36 px-4 bg-black-100 rounded-2xl border-2 border-black-200 justify-center items-center space-x-2">
+                <View className="w-32 h-32 px-4 bg-black-100 rounded-2xl border-2 border-black-200 justify-center items-center space-x-2">
                   <Image
                     source={icons.upload}
                     resizeMode="contain"
@@ -113,7 +115,7 @@ const Create = () => {
                     className="w-8 h-8"
                   />
                   <Text className="text-sm text-center text-gray-100 font-pmedium">
-                    Escolha um arquivo
+                    Escolha uma foto
                   </Text>
                 </View>
               )}
@@ -142,6 +144,7 @@ const Create = () => {
           handlePress={submit}
           containerStyles="mt-7"
           isLoading={uploading}
+          valordoproduto=""
         />
       </ScrollView>
     </SafeAreaView>

@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "my-app",
+    "name": "Vendas PA",
     "slug": "my-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/IconPA.jpg",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -16,7 +16,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/logopapelaria.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
